@@ -154,3 +154,7 @@ share: [
   "_build/install/default/share/goplot/images/zoom.svg" {"images/zoom.svg"}
   "_build/install/default/share/goplot/images/zoom_icon64.png" {"images/zoom_icon64.png"}
 ]
+doc: [
+  "_build/install/default/doc/goplot/README.html"
+  "_build/install/default/doc/goplot/README.md"
+]
