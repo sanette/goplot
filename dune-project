@@ -1,0 +1,21 @@
+(lang dune 1.11)
+(using menhir 2.0)
+(name goplot)
+(version "0.50")
+(generate_opam_files true)
+(license GPL2)
+(maintainers "Vu Ngoc San <san.vu-ngoc@laposte.net>")
+(authors "Vu Ngoc San <san.vu-ngoc@laposte.net>")
+(source (github sanette/goplot))
+
+(package
+ (name goplot)
+ (synopsis "Mathematical plotter")
+ (description "GUI for oplot: high-quality plotting of 2D usual mathematical functions, including animations and LaTeX formulas. Supports also 3D surfaces with interactive rotating.")
+ (tags ("plot" "2D" "3D" "math" "GUI"))
+ (depends
+  (menhir (>= 20120123))
+  (oplot (>= 0.10))
+  (lablgtk (>= 2.16.0))
+  (gsl (>= 1.24.0))
+  (dune (>= 1.11))))

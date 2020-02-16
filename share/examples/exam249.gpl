@@ -1,0 +1,16 @@
+%% Goplot version 0.2
+
+view {x=0; y=-2},
+{x=2; y=8}
+func {formula=1/(x+2)+x^3-1; var=x},
+{min=0; max=2}
+color {r=1.000000; g=0.000000; b=0.000000}
+func {formula=-1/2; var=x},
+{min=0; max=2}
+func {formula=5*x/6-1/2; var=x},
+{min=0; max=2}
+func {formula=73/24*x^2-53*x/24-1/2; var=x},
+{min=0; max=2}
+color {r=0.000000; g=0.000000; b=0.000000}
+axis {x=0; y=0}
+end

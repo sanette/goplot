@@ -1,0 +1,8 @@
+%% Goplot version 0.2
+
+surf3d {formula2=u*v; var1=u; var2=v},
+{formula2=u; var1=u; var2=v},
+{formula2=v*v-0.2; var1=u; var2=v},
+{min=-0.7; max=0.7},
+{min=-0.7; max=0.7}
+end

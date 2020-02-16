@@ -1,0 +1,20 @@
+%% Goplot version 0.2
+
+surf3d {formula2=(1+cos(u)/4)*cos(v)/2-0.2; var1=u; var2=v},
+{formula2=(1+cos(u)/4)*sin(v)/2-0.5; var1=u; var2=v},
+{formula2=sin(u)/8; var1=u; var2=v},
+{min=-Pi; max=Pi},
+{min=0; max=2*Pi}
+color {r=0.000000; g=1.000000; b=0.000000}
+surf3d {formula2=(1+cos(u)/4)*cos(v)/2+0.2; var1=u; var2=v},
+{formula2=(1+cos(u)/4)*sin(v)/2-0.5; var1=u; var2=v},
+{formula2=sin(u)/8; var1=u; var2=v},
+{min=-Pi; max=Pi},
+{min=0; max=2*Pi}
+color {r=1.000000; g=0.000000; b=0.000000}
+surf3d {formula2=(1+cos(u)/4)*cos(v)/2; var1=u; var2=v},
+{formula2=(1+cos(u)/4)*sin(v)/2; var1=u; var2=v},
+{formula2=sin(u)/8; var1=u; var2=v},
+{min=-Pi; max=Pi},
+{min=0; max=2*Pi}
+end

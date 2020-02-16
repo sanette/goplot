@@ -1,0 +1,14 @@
+%% Goplot version 0.2
+
+surf3d {formula2=(1+cos(u)/2*sin(v/2))*cos(v)/2; var1=u; var2=v},
+{formula2=(1+cos(u)/2*sin(v/2))*sin(v)/2; var1=u; var2=v},
+{formula2=sin(u)/4*sin(v/2); var1=u; var2=v},
+{min=-Pi; max=Pi},
+{min=0; max=2*Pi}
+color {r=0.101961; g=0.101961; b=0.101961}
+text {msg=A pinched torus
+ format=Plain_text; pos={x=0; y=0}; size=36; alignment=CENTER}
+color {r=0.647059; g=0.164706; b=0.164706}
+text {msg=A pinched torus
+ format=Plain_text; pos={x=-0.003; y=0.003}; size=36; alignment=CENTER}
+end

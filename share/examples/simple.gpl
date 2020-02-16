@@ -1,0 +1,8 @@
+%% Goplot version 0.2
+
+color {r=1.000000; g=0.000000; b=0.000000}
+func {formula=sin(x); var=x},
+{min=-Pi; max=Pi}
+color {r=0.000000; g=0.000000; b=0.000000}
+axis {x=0; y=0}
+end

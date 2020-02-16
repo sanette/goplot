@@ -1,0 +1,11 @@
+%% Goplot version 0.2
+
+surf3d {formula2=(1+cos(u)/2)*cos(v)/2; var1=u; var2=v},
+{formula2=(1+cos(u)/2)*sin(v)/2; var1=u; var2=v},
+{formula2=sin(u)/4; var1=u; var2=v},
+{min=-Pi; max=Pi},
+{min=0; max=2*Pi}
+rotate {x3=0; y3=1; z3=0.1},
+0.04,
+{min=0; max=4}
+end

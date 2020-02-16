@@ -1,0 +1,8 @@
+%% Goplot version 0.2
+
+surf3d {formula2=cosh(u)*cos(v)/10; var1=u; var2=v},
+{formula2=cosh(u)*sin(v)/10; var1=u; var2=v},
+{formula2=sinh(u)/6; var1=u; var2=v},
+{min=-2; max=2},
+{min=0; max=2*Pi}
+end

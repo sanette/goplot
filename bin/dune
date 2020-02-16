@@ -1,0 +1,5 @@
+(executable
+ (package goplot)
+ (public_name goplot)
+ (name goplot)
+ (libraries oplot parseutil lablgtk2 lablgtk2.gl lablgtk2.auto-init))

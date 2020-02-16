@@ -1,0 +1,8 @@
+open Oplot;;
+let p1 = color 1. 0. 0.;;
+let p2 = axis (0.) (0.);;
+let p3 = color 0. 0. 0.;;
+let p4 = latex "O" ~size:96 ~align:CENTER (0.) (0.);;
+let p5 = latex "plot" ~size:26 ~align:CENTER (0.) (0.);;
+let sh = [ p1 ; p2 ; p3 ; p4 ; p5 ];;
+display sh;;

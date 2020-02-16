@@ -1,0 +1,8 @@
+%% Goplot version 0.2
+
+surf3d {formula2=cos(v)^3*cos(u)^3; var1=u; var2=v},
+{formula2=sin(v)^3*cos(u)^3; var1=u; var2=v},
+{formula2=sin(u)^3; var1=u; var2=v},
+{min=-1.4; max=1.4},
+{min=0; max=2*Pi}
+end

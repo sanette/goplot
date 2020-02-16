@@ -1,0 +1,15 @@
+%% Goplot version 0.2
+
+view {x=-2.5; y=-10},
+{x=4; y=10}
+color {r=1.000000; g=0.000000; b=0.000000}
+func {formula=Gamma(x); var=x},
+{min=-2.5; max=4}
+color {r=0.749020; g=0.749020; b=0.749020}
+axis {x=0; y=0}
+color {r=0.000000; g=0.000000; b=0.000000}
+text {msg=The $\Gamma$ function
+ format=Full_latex; pos={x=1; y=5}; size=24; alignment=LEFT}
+text {msg=\Gamma(x) = \int_0^{+\infty} t^{x-1} e^{-t} dt
+ format=Latex_formula; pos={x=0.8; y=-5}; size=20; alignment=LEFT}
+end
