@@ -148,4 +148,7 @@
   ("images/play_icon16.png" as "images/play_icon16.png")
   ("images/view_icon96.png" as "images/view_icon96.png")
   ("images/view_icon192.png" as "images/view_icon192.png")
+  ("DejaVuSans.ttf" as "DejaVuSans.ttf")
+  ("fig2eps" as "fig2eps")
+  ("gpl.txt" as "gpl.txt")
 ))

@@ -7,6 +7,7 @@ bin: [
   "_build/install/default/bin/goplot"
 ]
 share: [
+  "_build/install/default/share/goplot/DejaVuSans.ttf"
   "_build/install/default/share/goplot/examples/exam249.gpl" {"examples/exam249.gpl"}
   "_build/install/default/share/goplot/examples/gamma.gpl" {"examples/gamma.gpl"}
   "_build/install/default/share/goplot/examples/hexaedre.gpl" {"examples/hexaedre.gpl"}
@@ -18,6 +19,8 @@ share: [
   "_build/install/default/share/goplot/examples/simple.gpl" {"examples/simple.gpl"}
   "_build/install/default/share/goplot/examples/sphere.gpl" {"examples/sphere.gpl"}
   "_build/install/default/share/goplot/examples/whitney.gpl" {"examples/whitney.gpl"}
+  "_build/install/default/share/goplot/fig2eps"
+  "_build/install/default/share/goplot/gpl.txt"
   "_build/install/default/share/goplot/header.tex"
   "_build/install/default/share/goplot/images/.directory" {"images/.directory"}
   "_build/install/default/share/goplot/images/anim.svg" {"images/anim.svg"}

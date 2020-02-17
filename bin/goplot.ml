@@ -54,8 +54,7 @@ let entry_callback style entry =
       "ERROR:\n\n integer value expected", `WARNING
     | e -> raise e in
   let message = Printf.sprintf "%s: %s\n" t out in
-  print_endline message;
-  flush stdout;
+  Debug.print "Message = %s" message;
   let msg_win = GWindow.message_dialog ~message_type 
       ~buttons:(GWindow.Buttons.close) ~message ~title:"Entry check" 
       ~position:`MOUSE 
@@ -156,7 +155,7 @@ let ask_font () =
   selection #ok_button#connect#clicked ~callback:
     (fun () -> 
        let font = selection#selection#font_name in 
-       print_endline font;
+       Debug.print "Font=%s" font;
        selection#destroy ())
   |> ignore;
   selection#show ()
@@ -614,7 +613,8 @@ let affiche_ligne olistr keyword message numero packing update =
      ~packing:buttonbox#pack ()
    |> ignore;
    button#connect#clicked ~callback:(fun () ->
-       print_int numero; flush stdout; modify olistr numero; update ())
+       Debug.print "Olist line #%i" numero;
+       flush stdout; modify olistr numero; update ())
    |> ignore;
 
    button#drag#source_set ~modi:[`BUTTON1] ~actions:[`MOVE] 
@@ -627,40 +627,42 @@ let affiche_ligne olistr keyword message numero packing update =
      | None -> new GDraw.pixmap pixmap
      | Some mask -> new GDraw.pixmap ~mask pixmap in
    button#drag#source_set_icon pix;
-   button#drag#connect#beginning ~callback:(fun _ -> print_endline "Drag!")
+   button#drag#connect#beginning ~callback:(fun _ -> Debug.print "%s" "Drag!")
    |> ignore;
    button#drag#connect#data_get ~callback:
      (fun _ sel ~info ~time -> sel#return (string_of_int numero);
        (* sel#return est obligatoire pour que ça marche... *)
        ignore (info, time);
-       print_endline (Printf.sprintf "Drag button was %d" numero))
+       Debug.print "Drag button was %d" numero)
    |> ignore;
    button#drag#connect#data_received ~callback:(fun _ ~x ~y sel ~info ~time ->
        ignore (x,y,info,time);
        let from_num = int_of_string (sel#data) in
        move from_num numero; update ();
-       print_endline 
-         (Printf.sprintf "Drop: Received %d on %d." 
-            from_num numero))
+       Debug.print "Drop: Received %d on %d." from_num numero)
    |> ignore;
    button#drag#dest_set ~flags:[`ALL] ~actions:[`MOVE] 
      [{Gtk.target="autre bouton"; Gtk.flags=[`SAME_APP]; Gtk.info=0}];
 
   );
 
-  let entry = GEdit.entry ~text:message ~width_chars:10 ~xalign:0. ~packing:hbox#add () in
+  let entry = GEdit.entry ~text:message ~width_chars:10 ~xalign:0.
+      ~packing:hbox#add () in
   entry#set_editable false;
   let button = GButton.button ~packing:hbox#pack () in
   GMisc.image ~stock:`DELETE ~packing:button#add ()
   |> ignore;
   button#connect#clicked ~callback:(fun () ->
-      print_int numero; flush stdout; remove numero; update ())
+      Debug.print "Olist line #%i" numero;
+      flush stdout; remove numero; update ())
   |> ignore;
 
   (let button = GButton.button ~packing:hbox#pack () in
    GMisc.image ~stock:`GO_UP ~packing:button#add ()
    |> ignore;
-   button#connect#clicked ~callback:(fun () -> print_int numero; flush stdout; up numero; update ()))
+   button#connect#clicked ~callback:(fun () ->
+       Debug.print "Olist line #%i" numero;
+       flush stdout; up numero; update ()))
  
 (* olist est une liste de ref de goplot_object *)
 let affiche_liste olistr packing update = 
@@ -830,7 +832,7 @@ let ask_filename ?default ?(keep_name=true) title filename file_action =
   selection #ok_button#connect#clicked ~callback:(fun () -> 
       let name = selection#filename in 
       if keep_name then filename := Some name;
-      if Debug.debug then print_endline name;
+      Debug.print "%s" name;
       file_action name;
       selection#destroy ())
   |> ignore;
@@ -929,10 +931,9 @@ let rec zone_display =
             counter := 0;
             zone.framelength <- min (dt+2) ((zone.framelength*12)/10+2);
             renew_timer zone; (* update timer *)
-            if Debug.debug then print_endline 
-                (Printf.sprintf "Last frames take too long to draw.\n\
-                                 Renewing timer with framelength: %d ms" 
-                   zone.framelength)
+            Debug.print "Last frames take too long to draw.\n\
+                         Renewing timer with framelength: %d ms" 
+              zone.framelength
           end
         end;
         Debug.print "done in %dms." dt
@@ -976,7 +977,7 @@ let oplot_display sh zone =
 
 (* inutilise... *)
 let refresh_display olist zone =
-  print_endline "Refresh...";
+  Debug.print "Refresh...";
   let sh = Convert.olist olist in
     oplot_display sh zone
 
@@ -991,7 +992,7 @@ let cautious_zone_display =
   fun zone -> 
     match (zone.timer, !timeout) with
     | None, None ->
-      if Debug.debug then print_endline "Add timer";
+      Debug.print "Add timer";
       timeout := Some 
           (GMain.Timeout.add ~ms:zone.framelength ~callback:
              (fun () -> zone_redisplay zone;
@@ -999,14 +1000,14 @@ let cautious_zone_display =
                false (* une seule fois *)
                (* ou alors utiliser GMain.Idle.add ? *) 
              ))
-    | _, _ -> if Debug.debug then print_endline "Busy"
+    | _, _ -> Debug.print "Busy"
 (* pas la peine de retracer s'il y a deja un timer. *)
        
      
 let zone_resize =
   (* let timeout : (GMain.Timeout.id option) ref = ref None in *)
   fun zone ~width ~height -> 
-  if Debug.debug then print_endline (Printf.sprintf "Width:%d Height:%d\n" width height);
+  Debug.print "Width:%d Height:%d\n" width height;
   Plt.resize_window width height;
   Osys.gl_resize ();
   cautious_zone_display zone
@@ -1109,10 +1110,15 @@ let set_cursor area =
     
 let gtk_key _window zone ev =
   let key = GdkEvent.Key.keyval ev in
-    if key = GdkKeysyms._Escape then print_endline "ESCAPE" else
-      if key = GdkKeysyms._f then toggle_fullscreen zone else
-      print_endline "some key";
-    true
+  if key = GdkKeysyms._Escape then Debug.print "ESCAPE" else
+  if key = GdkKeysyms._f then toggle_fullscreen zone else
+  if key = GdkKeysyms._l then begin
+    Osys.toggle_light ();
+    cautious_zone_display zone
+  end
+  else
+    Debug.print "some key";
+  true
 
 let disconnect obj signal_ref =
   match !signal_ref with
@@ -1135,54 +1141,56 @@ let gtk_mouse =
   and stop_signal   : (GtkSignal.id option) ref = ref None
   in fun zone ev ->
     let i = GdkEvent.Button.button ev in
-    if Debug.debug then print_endline (Printf.sprintf "button %d pressed." i);
+    Debug.print "button %d pressed." i;
     let (x,y) = get_mouse zone in
     if Debug.debug then begin
       let (xe,ye) = get_ev_mouse ev in
-      print_endline (Printf.sprintf "Mouse position (%d, %d) or (%d, %d)." x y xe ye)
+      Printf.sprintf "Mouse position (%d, %d) or (%d, %d)." x y xe ye
+      |> print_endline
     end;
     Osys.set_mouse_x x;
     Osys.set_mouse_y y;
     (* let timeout : (GMain.Timeout.id option) ref = ref None in *)
     (* we disconnect the former signal if there was one *)
     disconnect zone.area motion_signal;
-    motion_signal := Some (zone.area#event#connect#motion_notify ~callback:
-                             (fun _ev ->
-                                let (x,y) = get_mouse zone in
-                                Osys.gl_mouse_motion x y;
-                                if Debug.debug then print_endline (Printf.sprintf  "Motion: Mouse position (%d, %d)." x y);
-                                cautious_zone_display zone;
-                                true (* ? *)
-                             )); 
-    (* The value returned from this function indicates whether the event should be
-       propagated further by the GTK event handling mechanism. Returning TRUE indicates
-       that the event has been handled, and that it should not propagate
-       further. Returning FALSE continues the normal event handling. See the section on
-       Advanced Event and Signal Handling for more details on this propagation
-       process. *)
+    motion_signal := Some
+        (zone.area#event#connect#motion_notify ~callback:
+           (fun _ev ->
+              let (x,y) = get_mouse zone in
+              Osys.gl_mouse_motion x y;
+              Debug.print "Motion: Mouse position (%d, %d)." x y;
+              cautious_zone_display zone;
+              true (* ? *)
+           )); 
+    (* The value returned from this function indicates whether the event
+       should be propagated further by the GTK event handling
+       mechanism. Returning TRUE indicates that the event has been handled,
+       and that it should not propagate further. Returning FALSE continues the
+       normal event handling. See the section on Advanced Event and Signal
+       Handling for more details on this propagation process. *)
     stop_signal := Some (zone.area#event#connect#button_release ~callback:
                            (fun _ev ->
-                              if Debug.debug then print_endline (Printf.sprintf "Release button");
+                              Debug.print "Release button";
                               disconnect zone.area motion_signal;
                               true));  
     true (* ? *)
-     
+
 let enter_area signal window zone ev =
   Debug.print "Crossing state %d" (GdkEvent.Crossing.state ev);
   window#event#add [`KEY_PRESS];
   signal:=Some (window#event#connect#key_press ~callback:(gtk_key window zone));
   true
-    
+
 let leave_area signal window ev =
   Debug.print "Crossing state %d" (GdkEvent.Crossing.state ev);
   (match !signal with
    | Some s -> GtkSignal.disconnect window#as_widget s
    | None -> failwith "hein ?");
   true
-    
-    
+
+
 (*********************************)
-    
+
 let attach zone parent button window =
   Debug.print "On attache...";
   let visible = zone.area#misc#visible in
@@ -1193,7 +1201,7 @@ let attach zone parent button window =
 
   button#set_label !Labels.detach;
   if visible then widg#destroy () else Debug.print "Not visible ??"
- 
+
 let detach zone _parent button width height =
   Debug.print "detache";
   let new_win = GWindow.window ~title:"Goplot graph" ~width ~height ~allow_grow:true ~allow_shrink:true () in
@@ -1214,10 +1222,10 @@ let detach zone _parent button width height =
   |> ignore;
   set_cursor zone.area;
   new_win#show ()
-      
-      
+
+
 (*********************************)
-      
+
 let about () = 
   let image =  GdkPixbuf.from_file (imagepath ~size:128 "pelotte_icon") in
   let license = 
@@ -1226,8 +1234,8 @@ let about () =
     let rec loop () = (* TODO simplify this: *)
       Buffer.add_channel buf in_channel 4096; loop () in
     try loop () with End_of_file -> ();
-    let content = (*Glib.Convert.locale_to_utf8*) Buffer.contents buf in
-    close_in in_channel; content in
+      let content = (*Glib.Convert.locale_to_utf8*) Buffer.contents buf in
+      close_in in_channel; content in
   let window = GWindow.about_dialog 
       ~authors:["San Vũ Ngọc"]
       ~comments:"A mathematical plotter"
@@ -1342,7 +1350,7 @@ let main () =
   let update () =
     update_liste olistr sheetbox scrolled#add;
     display !olistr zone in
-  
+
   let file_menulist = 
     [ Stock (`OPEN, Do_not_desactivate, fun () ->
           Debug.print "Open";
@@ -1383,7 +1391,7 @@ let main () =
   let help_menulist = 
     [ Stock (`ABOUT , Do_not_desactivate, fun () ->
           (print_endline "gOplot, a GUI for the Oplot drawing library.\n By San \
-                          Vu Ngoc\n (c) 2006"; about()) );
+                          Vu Ngoc\n (c) 2006-2020"; about()) );
       Label (!Labels.math, Do_not_desactivate, Help.math_liste_dialog) ] in
   let menulist = [  ( Title_label !Labels.file , file_menulist ) ; 
                     ( Title_label !Labels.view , view_menulist ) ; 
@@ -1449,7 +1457,7 @@ let main () =
 
   (* update (); *)
   window, zone
-  
+
 (**********************************************************************)
 
 

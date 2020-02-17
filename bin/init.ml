@@ -48,12 +48,15 @@ exception Not_Implemented
 
 let concat = Filename.concat
 
-(* let oplotdir = Osys.oplot_dir *)
+let () =
+  let oplotdir = Osys.oplot_dir in
+  if not (Sys.file_exists oplotdir) then
+  Debug.print "Warning: directory %s not found." oplotdir
 
 let goplotdir =
   let basename, dirname = Filename.basename, Filename.dirname in
   let exe = Sys.executable_name in
-  Debug.print "Executable: %s" (basename exe);
+  Debug.print "Goplot executable: %s" (basename exe);
   Debug.print "Directory: %s" (basename (dirname exe));
   match (basename exe), (basename (dirname exe)) with
   | "goplot", "bin" ->
