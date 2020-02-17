@@ -1,6 +1,4 @@
 (* utils maths *)
-print_endline "Initialisation GSL errors...";;
-
 Gsl.Error.init ();;
 
 let sinc x =

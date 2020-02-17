@@ -4,9 +4,9 @@ module Plt = Oplot.Plt
 module Osys = Oplot.Internal
 
 type zone = { mutable window:GWindow.window; (* necessaire ? *)
-	      mutable area:GlGtk.area; mutable graph:Plt.plot_object;
-	      mutable framelength:int; mutable timer:GMain.Timeout.id option;
-	      mutable isopen:bool; mutable anim:bool }
+              mutable area:GlGtk.area; mutable graph:Plt.plot_object;
+              mutable framelength:int; mutable timer:GMain.Timeout.id option;
+              mutable isopen:bool; mutable anim:bool }
 
 type range = { min:string; max:string}
 
@@ -66,12 +66,11 @@ let imagedir = concat goplotdir "images"
 
 let imagepath ?(size=64) name =
   let s = Osys.iscale 1 * size in
-  print_int s;
   let rec loop s =
     if s = 0 then concat imagedir "warning.png"
     else let file = name ^ (string_of_int s) ^ ".png" 
                     |> concat imagedir in
       if Sys.file_exists file then file
       else loop (s-1) in
-  let f = loop s in
-  print_endline f; f
+  loop s
+

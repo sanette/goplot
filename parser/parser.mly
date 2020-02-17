@@ -1,3 +1,4 @@
+(* this file is part of gOplot *)
 (* menhir file *)
 
 %{

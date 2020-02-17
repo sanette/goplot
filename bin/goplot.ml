@@ -1265,7 +1265,7 @@ let splash () =
 let quitte () = 
   Osys.interrupt ();
   Plt.quit ();
-  print_endline "Quitting goplot!";
+  print_endline "Quitting gOplot!";
   GMain.Main.quit ();
   exit 0;; (*utile ?*)
 
