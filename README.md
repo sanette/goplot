@@ -5,9 +5,9 @@ Mathematical plotter for the desktop
 
 gOplot is powered by [oplot](https://github.com/sanette/oplot)
 
-## Download
+## Install
 
-## Dependencies
+### Dependencies
 
 gOplot needs the venerable libraries SDL1.2 (and not SDL2!) and GTK2
 (with GL extension). It also uses the GSL (Gnu Scientific
