@@ -32,8 +32,19 @@ sudo apt install texlive fig2ps
 
 ### Binaries
 
-Linux binaries are in the `repo` directory. Just create a new dir (or
-use `/usr/local`), extract the archive there, and run `bin/goplot`.
+Linux binaries are in the `repo` directory. Debian-like systems can
+use the latest `.deb` file. Install it with `sudo dpkg -i <filename>`
+and then run `goplot`.
+
+For others, just create a new dir (or use `/usr/local`), extract the
+archive there, and run `bin/goplot`.
+
+You may specify a specific scale for graphics (if the DPI is not
+correcty detected) with the '-s' option. For instance
+
+```
+goplot -s 1.6
+```
 
 ### Source
 

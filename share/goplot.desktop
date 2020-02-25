@@ -1,0 +1,19 @@
+[Desktop Entry]
+Comment=
+Comment[fr]=
+Encoding=UTF-8
+Exec=./goplot
+GenericName=
+GenericName[fr]=
+Icon=pelotte_icon64.png
+MimeType=
+Name=goplot
+Name[fr]=goplot
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DCOP-ServiceType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=

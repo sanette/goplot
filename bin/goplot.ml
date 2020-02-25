@@ -8,23 +8,26 @@
 open Init
 open Gutil
 
-exception No_such_item of string;;
+exception No_such_item of string
 
-let fullscreen = ref false;;
+let fullscreen = ref false
 
+(* This function will be set only after initializing the View menu. *)
+let fullscreen_button_set = ref (fun _ -> ())
+    
 (* liste de widgets à désactiver si la liste d'objets à tracer est vide *)
-let desactivate = ref [];;
-type desactivate_widget = Desactivate | Do_not_desactivate;;
+let desactivate = ref []
+type desactivate_widget = Desactivate | Do_not_desactivate
 let update_desactivate_list item desact =
   let addlist e l = l := e :: !l in
   match desact with
   | Desactivate -> addlist item desactivate
-  | Do_not_desactivate -> ();;
+  | Do_not_desactivate -> ()
 
 (**********************************************************************)
 
 let create_oplot_file olist filename =
-  let channel  = open_out filename in    
+  let channel = open_out filename in    
   output_string channel Default.header;
   Code.dump olist channel;
   output_string channel Default.footer;
@@ -61,7 +64,7 @@ let entry_callback style entry =
       ~modal:true () in
   msg_win#connect#response ~callback:(fun _ -> msg_win#destroy ())
   |> ignore;
-  msg_win#show ();;
+  msg_win#show ()
 
 let get_coords ?(zentry:GEdit.entry option) entry1 entry2 =
   let x = entry1#text
@@ -144,7 +147,7 @@ let curseur_hor value digits ~lower ~upper step_incr page_incr packing =
   let curseur = GRange.scale `HORIZONTAL ~value_pos:`LEFT
       ~adjustment:range ~digits ~draw_value:true
       ~packing:hbox#add ~show:true () in
-  curseur;;
+  curseur
 (* utiliser curseur#adjustment#value *)
 
 let ask_font () =
@@ -166,7 +169,7 @@ let ask_font2 () =
   let selection =
     GMisc.font_selection ~packing:main_vbox#add ~show:true () in
   window#show();
-  selection#font_name;;
+  selection#font_name
 
 (*****)
 
@@ -217,7 +220,7 @@ let axis a action =
       action (Axis ({ x=x0; y=y0}, ref None));
       close ())
   |> ignore;
-  button #grab_default ();;
+  button #grab_default ()
 
 
 let color co action =
@@ -235,7 +238,7 @@ let color co action =
   csd # colorsel # set_has_palette true;
   csd # ok_button # connect#clicked ~callback:(fun () ->
       let (r,g,b) = to_rgb (csd#colorsel#color) in
-      Default.color := (Color {Plt.r=r; Plt.g=g; Plt.b=b});
+      Default.color := (Color {Plt.r; Plt.g; Plt.b});
       action !Default.color;
       csd#destroy ())
   |> ignore;
@@ -554,7 +557,7 @@ let list_down liste i=
       | [e] -> e::res
       | e1::e2::r -> if n = i then loop r (n+2) (e1::e2::res)
  else loop (e2::r) (n+1) (e1::res)
-  in loop (List.rev liste) 0 [];;
+  in loop (List.rev liste) 0 []
 
 (* remove nth elem from end of list. Last is 1 *)
 let list_remove liste numero =
@@ -689,7 +692,24 @@ let add_object obj olistr update () =
     olistr := (ref o) :: !olistr;
     update () in
     action_obj obj action
-      
+
+let set_olist olistr newlist next =
+  if !olistr = [] then begin olistr := newlist; next () end
+  else let message = "Discard current list of objects?" in
+    let ok = GWindow.message_dialog
+        ~destroy_with_parent:true
+        ~buttons:GWindow.Buttons.yes_no ~message_type:`WARNING
+        ~title:"Warning - Discard" ~message ~modal:true ~position:`MOUSE ()
+    in
+    ok#show ();
+    ok#connect#response ~callback:(function
+        | `NO -> Debug.print "no";
+          ok#destroy ()
+        | `YES -> Debug.print "yes";
+          ok#destroy (); olistr := newlist; next ()
+        | `DELETE_EVENT -> Debug.print "delete"
+      ) |> ignore
+  
 let make_toolbars olistr sheetbox scroll_packing tool_packing =
   let update () = update_liste olistr sheetbox scroll_packing in
   let buttons2d = 
@@ -811,7 +831,7 @@ let make_toolbars olistr sheetbox scroll_packing tool_packing =
 
 
 let shell command = 
-  Printf.kprintf (fun s -> ignore (Sys.command s)) command;;
+  Printf.kprintf (fun s -> ignore (Sys.command s)) command
 
 
 (************ menus ********)
@@ -838,8 +858,30 @@ let ask_filename ?default ?(keep_name=true) title filename file_action =
   |> ignore;
   selection#show ()
 
+let check_overwrite filename next =
+  if Sys.file_exists filename then
+    let message = Printf.sprintf
+        "File %s already exists.\n<span weight=\"bold\">Overwrite?</span>"
+        filename in
+    let ok = GWindow.message_dialog ~use_markup:true
+        ~destroy_with_parent:true
+        ~buttons:GWindow.Buttons.yes_no ~message_type:`WARNING
+        ~title:"Warning - Overwrite" ~message ~modal:true ~position:`MOUSE ()
+    in
+    ok#show ();
+    ok#connect#response ~callback:(function
+        | `NO -> Debug.print "no";
+          ok#destroy ()
+        | `YES -> Debug.print "yes";
+          ok#destroy (); next ()
+        | `DELETE_EVENT -> Debug.print "delete"
+      ) |> ignore
+  else next ()
+  
 let save_as olist filename =
-  ask_filename "Save as:" filename (fun name -> Output.file olist name)
+  ask_filename "Save as:" filename (fun name ->
+      check_overwrite name (fun () ->
+          Output.file olist name))
 
 let save_oplot olist filename =
   (* TODO ajouter le module Mathutils *)
@@ -847,23 +889,27 @@ let save_oplot olist filename =
     | None -> "my_oplot.ml"
     | Some name -> Filename.remove_extension name ^ ".ml" in
   ask_filename ~default ~keep_name:false "Export to:" filename
-    (fun name -> create_oplot_file olist name)
-
+    (fun name ->
+       check_overwrite name (fun () ->
+           create_oplot_file olist name))
+  
 let save olist filename = 
   match !filename with
       None -> save_as olist filename
     | Some name -> (*create_oplot_file*) Output.file olist name
  
 let open_file olistr update =
-  ask_filename "Open:" filename (fun name -> Read.file olistr name; update ())
+  set_olist olistr [] (fun () ->
+      ask_filename "Open:" filename (fun name ->
+          Read.file olistr name; update ()))
 
 
 type menu_title = | Title_label of string
-    | Title_stock of GtkStock.id
+                  | Title_stock of GtkStock.id
 
 type menu_entry = | Stock of (GtkStock.id * desactivate_widget * (unit -> unit)) 
     | Label of (string * desactivate_widget * (unit -> unit))
-    | Check of (string * desactivate_widget * (bool -> unit))
+    | Check of (string * desactivate_widget * ((bool -> unit) -> bool -> unit))
 
 let create_menu_item this_menulist packing =
   let menu =  GMenu.menu ~packing () in
@@ -884,9 +930,12 @@ let create_menu_item this_menulist packing =
       loop r
     (* GMisc.image ~stock:`DELETE ~packing:item#add (); *)  (* pour mettre une image, enlever le ~label du GMenu *)
     | (Check (s, desact, action))::r ->
-      let item = GMenu.check_menu_item ~use_mnemonic:true ~label:s ~packing:menu#append () in
-      item#connect#activate ~callback:(fun () -> action item#active)
+      let item = GMenu.check_menu_item ~use_mnemonic:true ~label:s
+          ~packing:menu#append () in
+      item#connect#activate ~callback:(fun () ->
+          action item#set_active item#active)
       |> ignore;
+      action item#set_active item#active;
       update_desactivate_list (item#coerce#misc#set_sensitive) desact;
       (*(fun () ->  variable := not !variable);*)
       loop r
@@ -925,7 +974,7 @@ let rec zone_display =
            GTK n'arrive plus a effectuer ses autres taches. Dans ce cas on
            reduit le framelength *)
         if dt >= zone.framelength then begin
-          Printf.printf "(%d:%d)\n" dt zone.framelength;
+          Debug.print "dt:framelength=(%d:%d)\n" dt zone.framelength;
           incr counter;
           if !counter = 5 then begin
             counter := 0;
@@ -983,7 +1032,7 @@ let refresh_display olist zone =
 
 let display olist zone =
   let sh = Convert.olist olist in
-  oplot_display sh zone;;
+  oplot_display sh zone
 
 (* this one first checks whether a timer is about to end before attemping to
    draw once. If there is no timer, we add one to to trigger the drawing. *)
@@ -1002,8 +1051,15 @@ let cautious_zone_display =
              ))
     | _, _ -> Debug.print "Busy"
 (* pas la peine de retracer s'il y a deja un timer. *)
-       
-     
+
+let area_reset area =
+  let width = 480 |> Osys.iscale in
+  let height = 360 |> Osys.iscale in
+  area#set_size ~width ~height;
+  Osys.gl_init ();
+  Plt.resize_window width height;
+  Osys.gl_resize ()
+    
 let zone_resize =
   (* let timeout : (GMain.Timeout.id option) ref = ref None in *)
   fun zone ~width ~height -> 
@@ -1017,16 +1073,16 @@ let zone_resize =
 
 
 (* for devices other than gl *)
-let use_oplot_device olist dev zone =
+let use_oplot_device ?output olist dev zone =
   let sh = Convert.olist olist in
-  Plt.display ~dev sh;
-    if zone.isopen then display olist zone;;
+  Plt.display ?output ~dev sh;
+  if zone.isopen then display olist zone
 
 let viewps olist zone =
-  use_oplot_device olist Plt.gv zone;;
+  use_oplot_device olist Plt.gv zone
 
 let viewfig olist zone =
-  use_oplot_device olist Plt.xfig zone;;
+  use_oplot_device olist Plt.xfig zone
 
 let view_screenshot zone = 
   let win = (* GtkBase.Widget.window zone.area#as_area *)
@@ -1039,16 +1095,26 @@ let view_screenshot zone =
     ask_filename "Save PNG image as:" (ref (Some "image.png"))
       (fun name -> GdkPixbuf.save ~filename:name ~typ:"png" pix)
 
+let save_pdf olist filename zone =
+  let default = match !filename with
+    | None -> "goplot_output.pdf"
+    | Some name -> Filename.remove_extension name ^ ".pdf" in
+  ask_filename ~default ~keep_name:false "Export to:" filename
+    (fun name ->
+       check_overwrite name (fun () ->
+           use_oplot_device ~output:name olist Plt.pdf zone))
+    
 (*********************)
       
 let toggle_fullscreen_old zone = 
   fullscreen := not !fullscreen;
   if !fullscreen then zone.window#fullscreen () else zone.window#unfullscreen ();
   let width, height = Gdk.Drawable.get_size (zone.window#misc#window) in
-    zone_resize zone ~width ~height
+  zone_resize zone ~width ~height
    
 let set_fullscreen zone b = 
   fullscreen := b;
+  !fullscreen_button_set b;
   if b then zone.window#fullscreen () else zone.window#unfullscreen ();
   let width, height = Gdk.Drawable.get_size (zone.window#misc#window) in
     zone_resize zone ~width ~height
@@ -1077,25 +1143,20 @@ let pref_window zone =
       ~lower:0.5 ~upper:5. 0.1 10. scale#add in
   (* pourquoi page_incr=1. ne marche pas ?? *)
 
+  let light = GPack.hbox ~packing:main_vbox#pack () in
+  let b = GButton.check_button ~label:"3D lighting" ~active:(Osys.get_light ())
+      ~packing:light#pack () in
+  b#connect#toggled ~callback:(fun () -> Osys.toggle_light (); cautious_zone_display zone) |> ignore;
+
   let button = validatebutton main_vbox#pack in
   button#connect#clicked ~callback:(fun () ->  
       let fps = framerate_slide#adjustment#value in
       Debug.print "FPS=%f" fps;
       zone.framelength <- (int_of_float (1000. /. fps));
-      let old_scale = Plt.get_gl_scale () in
       Plt.set_gl_scale scale_slide#adjustment#value;
       Debug.print "GL Scale=%f" (Plt.get_gl_scale ());
-      (* let width = 500 |> Osys.iscale in
-       * let height = 375 |> Osys.iscale in *)
-      let width, height = Gdk.Drawable.get_size zone.area#misc#window in
-      let width = Osys.scale (float width /. old_scale) |> int_of_float in
-      let height = Osys.scale (float height /. old_scale) |> int_of_float in
-      zone.area#set_size ~width ~height; (* ne marche pas bien, en partic en mode détaché *)
-      Osys.gl_init ();
-      Osys.gl_resize ();
-      Debug.print "width=%i" width;
+      area_reset zone.area;
       Osys.force_refresh ();
-      (* refresh (); *)
       cautious_zone_display zone;
       window#destroy ())
   |> ignore;
@@ -1253,7 +1314,7 @@ let about () =
 
   (*window#connect#close ~callback:window#destroy;*)
   let _ok = window#run () in
-  window#destroy ();;
+  window#destroy ()
 
 
 (*********************************) 
@@ -1265,7 +1326,7 @@ let splash () =
   GMisc.image ~file:(concat imagedir "pelotte_splash.png")
     ~packing:window#add ()
   |> ignore;
-  window;;
+  window
 
 (*********************************) 
 
@@ -1284,6 +1345,8 @@ let main () =
     prerr_endline "User required interrupt!" in
   Sys.set_signal Sys.sigint (Sys.Signal_handle quit_on_interrupt); 
   (* ne marche pas avec CTRLc.. Faire aussi sigkill *)
+
+  (* Oplot list *)
   let olistr = ref [] in
   let window = GWindow.window (* ~width:900 *) ~title:"gOplot - a GUI for Oplot" () in
   window#connect#destroy ~callback:GMain.quit |> ignore;
@@ -1311,10 +1374,13 @@ let main () =
           `DOUBLEBUFFER] *)
       ~width ~height ~packing:w#add () in
   Debug.print "load splash";
-  let zone = { window = window;
-               area = area; graph = (Plt.Sheet Default.splash);
+  let zone = { window;
+               area;
+               graph = (Plt.Sheet Default.splash);
                framelength = Osys.get_frame_length ();
-               timer = None; isopen = false; anim = false} in
+               timer = None;
+               isopen = false;
+               anim = false} in
   area#connect#realize ~callback:(fun () ->
       Osys.gl_init ();
       Plt.resize_window width height;
@@ -1333,8 +1399,8 @@ let main () =
   set_cursor area;
 
   (* zone des objets goplot *)  
-  let tmp = GBin.scrolled_window ~width:400 ~border_width:0 ~hpolicy: `AUTOMATIC 
-      ~vpolicy: `AUTOMATIC ~shadow_type:`IN ~placement:`TOP_LEFT 
+  let tmp = GBin.scrolled_window ~width:400 ~border_width:0 ~hpolicy:`AUTOMATIC 
+      ~vpolicy:`AUTOMATIC ~shadow_type:`IN ~placement:`TOP_LEFT 
       ~packing:mainbox#add () in
 
   let scrolled = GBin.frame ~border_width:5 ~label:!Labels.main 
@@ -1364,14 +1430,19 @@ let main () =
       Label (!Labels.save_oplot, Desactivate, fun () ->
           Debug.print "Export to oplot";
           save_oplot !olistr filename) ;
+      Label (!Labels.save_pdf, Desactivate, fun () ->
+          Debug.print "Export to PDF";
+          save_pdf !olistr filename zone) ;
       Stock (`PRINT, Desactivate, fun () -> Debug.print "Print!";
                viewps !olistr zone) ;
       Stock (`QUIT , Do_not_desactivate, quitte) ] in
   let view_menulist = 
     [ Check (!Labels.fullscreen, Do_not_desactivate, 
-             fun b -> set_fullscreen zone b) ;
+             fun activate b ->
+               fullscreen_button_set := activate;
+               set_fullscreen zone b) ;
       Check (!Labels.hide_tools, Do_not_desactivate,
-             fun b -> if b then begin
+             fun _ b -> if b then begin
                  toolbar1#misc#hide();
                  toolbar2#misc#hide() end
                else begin
@@ -1401,9 +1472,9 @@ let main () =
 
   let gallery_menulist = 
     [ Label ("Simple plot", Do_not_desactivate, 
-             fun () -> olistr := Gallery.example; update ());
+             fun () -> set_olist olistr Gallery.example update);
       Label ("Pinched torus", Do_not_desactivate, 
-             fun () -> olistr := Gallery.pinched_torus; update ())] in
+             fun () -> set_olist olistr Gallery.pinched_torus update)] in
   let new_menulist = [( Title_label !Labels.gallery , gallery_menulist );
                       ( Title_stock `HELP , help_menulist )] in
   create_menu new_menulist menubar#append;
@@ -1456,7 +1527,7 @@ let main () =
    |> ignore;);
 
   (* update (); *)
-  window, zone
+  zone
 
 (**********************************************************************)
 
@@ -1465,16 +1536,27 @@ let main () =
 (***************************************)
 
 let _ =
+  (* Reading command-line arguments *)
+  let scale = ref (Plt.get_gl_scale ()) in
+  let speclist =
+    ["-s", Arg.Set_float scale,
+     "global scale for graphics (default: autodetected)"] in
+  let usage_msg = "Usage: " ^ Sys.argv.(0) ^ " [-s scale]" in
+  Arg.parse speclist (fun _ -> ()) usage_msg;
+  Plt.set_gl_scale !scale;
+  Debug.print "Using scale %f from command line option." !scale;
+
   (*let splash_win = splash () in*)
-  Osys.init ();
+  (* Osys.init (); *)
+  
   Osys.(set_default_gl GTK);
 
   Labels.inits ();
   (* let oplot_channel = Event.new_channel () in *)
-  let main_window, zone = main () in
+  let zone = main () in
   print_endline "Starting gOplot";
   let show = fun () -> begin
-      main_window#show ();
+      zone.window#show ();
       zone.isopen <- true
     end in
   if Osys.first_time () then begin
@@ -1484,7 +1566,7 @@ let _ =
   else show ();
   (*splash_win#destroy ();*)
   GMain.Main.main ()
-;;
+
 
 
 

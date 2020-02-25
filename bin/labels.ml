@@ -7,7 +7,8 @@ let () = if debug then print_endline "( labels"
 
 let main = ref "Oplot main sheet"
 let draw = ref "_Draw sheet"
-let save_oplot = ref "_Export to Ocaml"
+let save_oplot = ref "Export to Ocaml"
+let save_pdf = ref "E_xport to PDF"   
 let file = ref "_File"
 let detach = ref "Deta_ch"
 let view = ref "_View"
@@ -54,7 +55,8 @@ let inits () =
     "fr_FR" -> (
       assign main "Oplot: feuille principale";
       assign draw "_Lancer le tracé";
-      assign save_oplot "_Exporter en Ocaml";
+      assign save_oplot "Exporter en Ocaml";
+      assign save_pdf "E_xporter en PDF";
       assign file "_Fichier";
       assign detach "Déta_cher";
       assign view "_Affichage";
