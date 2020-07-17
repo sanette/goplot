@@ -77,8 +77,7 @@ let header =
 "(* OCaml toplevel file created by goplot *)
 #use \"topfind\";;
 #require \"oplot\";;
-open Oplot.Main;;
-open Oplot.Def;;
+open Oplot.Plt;;
 \n\n"
 
 let footer = (* + fullscreen *)

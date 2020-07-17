@@ -20,6 +20,7 @@ share: [
   "_build/install/default/share/goplot/examples/sphere.gpl" {"examples/sphere.gpl"}
   "_build/install/default/share/goplot/examples/whitney.gpl" {"examples/whitney.gpl"}
   "_build/install/default/share/goplot/fig2eps"
+  "_build/install/default/share/goplot/goplot.desktop"
   "_build/install/default/share/goplot/gpl.txt"
   "_build/install/default/share/goplot/header.tex"
   "_build/install/default/share/goplot/images/.directory" {"images/.directory"}
@@ -49,14 +50,19 @@ share: [
   "_build/install/default/share/goplot/images/color_icon64.png" {"images/color_icon64.png"}
   "_build/install/default/share/goplot/images/color_icon96.png" {"images/color_icon96.png"}
   "_build/install/default/share/goplot/images/dynam.svg" {"images/dynam.svg"}
+  "_build/install/default/share/goplot/images/dynam_icon128.png" {"images/dynam_icon128.png"}
   "_build/install/default/share/goplot/images/dynam_icon16.png" {"images/dynam_icon16.png"}
+  "_build/install/default/share/goplot/images/dynam_icon192.png" {"images/dynam_icon192.png"}
   "_build/install/default/share/goplot/images/dynam_icon32.png" {"images/dynam_icon32.png"}
+  "_build/install/default/share/goplot/images/dynam_icon48.png" {"images/dynam_icon48.png"}
   "_build/install/default/share/goplot/images/dynam_icon64.png" {"images/dynam_icon64.png"}
+  "_build/install/default/share/goplot/images/dynam_icon96.png" {"images/dynam_icon96.png"}
   "_build/install/default/share/goplot/images/formula.svg" {"images/formula.svg"}
   "_build/install/default/share/goplot/images/formula_icon128.png" {"images/formula_icon128.png"}
   "_build/install/default/share/goplot/images/formula_icon16.png" {"images/formula_icon16.png"}
   "_build/install/default/share/goplot/images/formula_icon192.png" {"images/formula_icon192.png"}
   "_build/install/default/share/goplot/images/formula_icon32.png" {"images/formula_icon32.png"}
+  "_build/install/default/share/goplot/images/formula_icon48.png" {"images/formula_icon48.png"}
   "_build/install/default/share/goplot/images/formula_icon64.png" {"images/formula_icon64.png"}
   "_build/install/default/share/goplot/images/formula_icon96.png" {"images/formula_icon96.png"}
   "_build/install/default/share/goplot/images/freeze.svg" {"images/freeze.svg"}
@@ -90,6 +96,7 @@ share: [
   "_build/install/default/share/goplot/images/latex_icon16.png" {"images/latex_icon16.png"}
   "_build/install/default/share/goplot/images/latex_icon192.png" {"images/latex_icon192.png"}
   "_build/install/default/share/goplot/images/latex_icon32.png" {"images/latex_icon32.png"}
+  "_build/install/default/share/goplot/images/latex_icon48.png" {"images/latex_icon48.png"}
   "_build/install/default/share/goplot/images/latex_icon64.png" {"images/latex_icon64.png"}
   "_build/install/default/share/goplot/images/latex_icon96.png" {"images/latex_icon96.png"}
   "_build/install/default/share/goplot/images/logo.oplot" {"images/logo.oplot"}
@@ -100,12 +107,15 @@ share: [
   "_build/install/default/share/goplot/images/motion_icon16.png" {"images/motion_icon16.png"}
   "_build/install/default/share/goplot/images/motion_icon192.png" {"images/motion_icon192.png"}
   "_build/install/default/share/goplot/images/motion_icon32.png" {"images/motion_icon32.png"}
+  "_build/install/default/share/goplot/images/motion_icon48.png" {"images/motion_icon48.png"}
   "_build/install/default/share/goplot/images/motion_icon64.png" {"images/motion_icon64.png"}
   "_build/install/default/share/goplot/images/motion_icon96.png" {"images/motion_icon96.png"}
   "_build/install/default/share/goplot/images/param.svg" {"images/param.svg"}
   "_build/install/default/share/goplot/images/param_icon128.png" {"images/param_icon128.png"}
   "_build/install/default/share/goplot/images/param_icon16.png" {"images/param_icon16.png"}
+  "_build/install/default/share/goplot/images/param_icon192.png" {"images/param_icon192.png"}
   "_build/install/default/share/goplot/images/param_icon32.png" {"images/param_icon32.png"}
+  "_build/install/default/share/goplot/images/param_icon48.png" {"images/param_icon48.png"}
   "_build/install/default/share/goplot/images/param_icon64.png" {"images/param_icon64.png"}
   "_build/install/default/share/goplot/images/param_icon96.png" {"images/param_icon96.png"}
   "_build/install/default/share/goplot/images/pelotte.svg" {"images/pelotte.svg"}
@@ -121,12 +131,17 @@ share: [
   "_build/install/default/share/goplot/images/play_icon16.png" {"images/play_icon16.png"}
   "_build/install/default/share/goplot/images/play_icon192.png" {"images/play_icon192.png"}
   "_build/install/default/share/goplot/images/play_icon32.png" {"images/play_icon32.png"}
+  "_build/install/default/share/goplot/images/play_icon48.png" {"images/play_icon48.png"}
   "_build/install/default/share/goplot/images/play_icon64.png" {"images/play_icon64.png"}
   "_build/install/default/share/goplot/images/play_icon96.png" {"images/play_icon96.png"}
   "_build/install/default/share/goplot/images/rotate.svg" {"images/rotate.svg"}
+  "_build/install/default/share/goplot/images/rotate_icon128.png" {"images/rotate_icon128.png"}
   "_build/install/default/share/goplot/images/rotate_icon16.png" {"images/rotate_icon16.png"}
+  "_build/install/default/share/goplot/images/rotate_icon192.png" {"images/rotate_icon192.png"}
   "_build/install/default/share/goplot/images/rotate_icon32.png" {"images/rotate_icon32.png"}
+  "_build/install/default/share/goplot/images/rotate_icon48.png" {"images/rotate_icon48.png"}
   "_build/install/default/share/goplot/images/rotate_icon64.png" {"images/rotate_icon64.png"}
+  "_build/install/default/share/goplot/images/rotate_icon96.png" {"images/rotate_icon96.png"}
   "_build/install/default/share/goplot/images/splash.png" {"images/splash.png"}
   "_build/install/default/share/goplot/images/splash.svg" {"images/splash.svg"}
   "_build/install/default/share/goplot/images/surf3d.svg" {"images/surf3d.svg"}
@@ -134,6 +149,7 @@ share: [
   "_build/install/default/share/goplot/images/surf3d_icon16.png" {"images/surf3d_icon16.png"}
   "_build/install/default/share/goplot/images/surf3d_icon192.png" {"images/surf3d_icon192.png"}
   "_build/install/default/share/goplot/images/surf3d_icon32.png" {"images/surf3d_icon32.png"}
+  "_build/install/default/share/goplot/images/surf3d_icon48.png" {"images/surf3d_icon48.png"}
   "_build/install/default/share/goplot/images/surf3d_icon64.png" {"images/surf3d_icon64.png"}
   "_build/install/default/share/goplot/images/surf3d_icon96.png" {"images/surf3d_icon96.png"}
   "_build/install/default/share/goplot/images/text.svg" {"images/text.svg"}
@@ -141,21 +157,35 @@ share: [
   "_build/install/default/share/goplot/images/text_icon16.png" {"images/text_icon16.png"}
   "_build/install/default/share/goplot/images/text_icon192.png" {"images/text_icon192.png"}
   "_build/install/default/share/goplot/images/text_icon32.png" {"images/text_icon32.png"}
+  "_build/install/default/share/goplot/images/text_icon48.png" {"images/text_icon48.png"}
   "_build/install/default/share/goplot/images/text_icon64.png" {"images/text_icon64.png"}
   "_build/install/default/share/goplot/images/text_icon96.png" {"images/text_icon96.png"}
   "_build/install/default/share/goplot/images/torus.png" {"images/torus.png"}
   "_build/install/default/share/goplot/images/translate.svg" {"images/translate.svg"}
+  "_build/install/default/share/goplot/images/translate_icon128.png" {"images/translate_icon128.png"}
+  "_build/install/default/share/goplot/images/translate_icon16.png" {"images/translate_icon16.png"}
+  "_build/install/default/share/goplot/images/translate_icon192.png" {"images/translate_icon192.png"}
+  "_build/install/default/share/goplot/images/translate_icon32.png" {"images/translate_icon32.png"}
+  "_build/install/default/share/goplot/images/translate_icon48.png" {"images/translate_icon48.png"}
   "_build/install/default/share/goplot/images/translate_icon64.png" {"images/translate_icon64.png"}
+  "_build/install/default/share/goplot/images/translate_icon96.png" {"images/translate_icon96.png"}
   "_build/install/default/share/goplot/images/view.svg" {"images/view.svg"}
   "_build/install/default/share/goplot/images/view_icon128.png" {"images/view_icon128.png"}
   "_build/install/default/share/goplot/images/view_icon16.png" {"images/view_icon16.png"}
   "_build/install/default/share/goplot/images/view_icon192.png" {"images/view_icon192.png"}
   "_build/install/default/share/goplot/images/view_icon32.png" {"images/view_icon32.png"}
+  "_build/install/default/share/goplot/images/view_icon48.png" {"images/view_icon48.png"}
   "_build/install/default/share/goplot/images/view_icon64.png" {"images/view_icon64.png"}
   "_build/install/default/share/goplot/images/view_icon96.png" {"images/view_icon96.png"}
   "_build/install/default/share/goplot/images/warning.png" {"images/warning.png"}
   "_build/install/default/share/goplot/images/zoom.svg" {"images/zoom.svg"}
+  "_build/install/default/share/goplot/images/zoom_icon128.png" {"images/zoom_icon128.png"}
+  "_build/install/default/share/goplot/images/zoom_icon16.png" {"images/zoom_icon16.png"}
+  "_build/install/default/share/goplot/images/zoom_icon192.png" {"images/zoom_icon192.png"}
+  "_build/install/default/share/goplot/images/zoom_icon32.png" {"images/zoom_icon32.png"}
+  "_build/install/default/share/goplot/images/zoom_icon48.png" {"images/zoom_icon48.png"}
   "_build/install/default/share/goplot/images/zoom_icon64.png" {"images/zoom_icon64.png"}
+  "_build/install/default/share/goplot/images/zoom_icon96.png" {"images/zoom_icon96.png"}
 ]
 doc: [
   "_build/install/default/doc/goplot/README.html"

@@ -125,7 +125,9 @@ let convert2oplot go =
    convertis. *)
 let olist golist =
   Debug.print "Converting to Oplot...";
-  List.rev (List.map (fun go -> convert2oplot !go) golist)
+  List.rev (List.mapi (fun i go ->
+      Debug.print "Converting object #%i" (i+1);
+      convert2oplot !go) golist)
 
 let keyword go = 
   match go with

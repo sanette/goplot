@@ -1,4 +1,4 @@
-let version = "0.2"
+let version = "0.5"
 
 module Plt = Oplot.Plt
 module Osys = Oplot.Internal

@@ -1,6 +1,12 @@
 (* utils maths *)
 Gsl.Error.init ();;
 
+let fmax x y : float = max x y
+    
+let pos x = fmax x 0.
+
+let sign x = if x > 0. then 1. else if x < 0. then (-1.) else 0. 
+    
 let sinc x =
   if x = 0. then 1.
   else sin x /. x;;
