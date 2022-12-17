@@ -13,8 +13,9 @@ gOplot needs the external libraries SDL2 and GTK2 (with GL
 extension). It also uses the GSL (Gnu Scientific Library). They are
 all very common and stable, and should be easy to install.
 
-In principle using `opam install goplot` will take care of these
-required external dependencies.
+(Note that if you can build gOplot from sources (see below) then in
+principle using `opam install .` will take care of these required
+external dependencies.)
 
 To enable exporting to EPS or PDF you need `fig2dev`:
 ```
@@ -50,6 +51,10 @@ easily build `goplot` by cloning this repository and
 ```
 dune exec bin/goplot.exe
 ```
+
+Alternatively, it is even simpler to use
+```opam install .```
+as this will also take care of external dependencies.
 
 ### Examples
 
