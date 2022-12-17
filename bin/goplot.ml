@@ -1525,7 +1525,7 @@ let main ?load_file () =
   let help_menulist =
     [ Stock (`ABOUT , Do_not_desactivate, fun () ->
           (print_endline "gOplot, a GUI for the Oplot drawing library.\n By San \
-                          Vu Ngoc\n (c) 2006-2020"; about()) );
+                          Vu Ngoc\n (c) 2006-2022"; about()) );
       Label (!Labels.math, Do_not_desactivate, Help.math_liste_dialog) ] in
   let menulist = [  ( Title_label !Labels.file , file_menulist ) ;
                     ( Title_label !Labels.view , view_menulist ) ;

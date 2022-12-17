@@ -37,34 +37,34 @@ let view = View ({ x="-1"; y="-1" }, { x="1"; y="1" })
 let color = ref (Color { r=0.; g=1.; b=0. })
 
 let func = Func ({ formula="sin(x)"; var="x"}, { min="-Pi"; max="Pi"}, dumb)
-  
+
 let anim = Anim_func ({ formula2="sin(x+t)"; var1="x"; var2="t" },
 		      { min="-Pi"; max="Pi"}, { min="0"; max="0" })
-  
-let param = Param ({ formula="sqrt(s)*sin(s)"; var="s"}, 
+
+let param = Param ({ formula="sqrt(s)*sin(s)"; var="s"},
 		   { formula="sqrt(s)*cos(s)"; var="s"}, { min="0"; max="5*Pi"}, dumb)
-  
+
 let surf3d = Surface ({ formula2="(1+cos(u)/2)*cos(v)/2"; var1="u"; var2="v" },
 		      { formula2="(1+cos(u)/2)*sin(v)/2"; var1="u"; var2="v" },
 		      { formula2="sin(u)/4"; var1="x"; var2="y" },
 		      { min="-Pi"; max="Pi"}, { min="0"; max="2*Pi" }, dumb)
-  
+
 let grid = Grid ({ formula2="(1+cos(x)/2)*cos(y)/4"; var1="x"; var2="y" },
 		 { min="-Pi"; max="3*Pi"}, { min="-Pi"; max="3*Pi" }, dumb)
-  
+
 let text = Text ({ msg="Hello world"; format=Plain_text; pos={ x="0"; y="0" };
 		   size=24; alignment="CENTER"}, dumb)
-  
-let formula = Text ({ msg="\\int_0^1 f(x) dx"; format=Latex_formula; 
+
+let formula = Text ({ msg="\\int_0^1 f(x) dx"; format=Latex_formula;
 		      pos={ x="0"; y="0" }; size=24; alignment="CENTER"}, dumb)
-  
+
 let latex = Text ({ msg="Here you \\textbf{must} use $f(x)=\\sin(x)$.";
 		    format=Full_latex; pos={ x="0"; y="0" };
 		    size=24; alignment="CENTER"}, dumb)
 
 let pause = Pause (Soft, 0)
 
-let motion = Motion { move=(Rotate ({x3="0"; y3="1"; z3="0"}, "0.05")); 
+let motion = Motion { move=(Rotate ({x3="0"; y3="1"; z3="0"}, "0.05"));
 		      trange={min="0"; max="4"} }
 
 let rotate = ({x3="0"; y3="1"; z3="0"}, "0.05")
@@ -76,6 +76,7 @@ let zoom = "??"
 let header =
 "(* OCaml toplevel file created by goplot *)
 #use \"topfind\";;
+#thread;;
 #require \"oplot\";;
 open Oplot.Plt;;
 \n\n"

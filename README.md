@@ -9,15 +9,12 @@ gOplot is powered by [oplot](https://github.com/sanette/oplot)
 
 ### Dependencies
 
-gOplot needs the venerable libraries SDL1.2 (and not SDL2!) and GTK2
-(with GL extension). It also uses the GSL (Gnu Scientific
-Library). They are all very common and stable, and should be easy to
-install.
+gOplot needs the external libraries SDL2 and GTK2 (with GL
+extension). It also uses the GSL (Gnu Scientific Library). They are
+all very common and stable, and should be easy to install.
 
-On a ubuntu system you may simply type:
-```
-sudo apt install libgtkgl2.0-1 libgsl23 libsdl-ttf2.0-0 libsdl-image1.2
-```
+In principle using `opam install goplot` will take care of these
+required external dependencies.
 
 To enable exporting to EPS or PDF you need `fig2dev`:
 ```
@@ -52,4 +49,15 @@ If you have the usual `ocaml` development stack (`dune`), you can
 easily build `goplot` by cloning this repository and
 ```
 dune exec bin/goplot.exe
+```
+
+### Examples
+
+Two examples are in gOplot's "Gallery" menu.
+
+Other examples are in the share/examples directory. Use gOplot's
+"File/Load" menu to load them. Or directly from the command line, example:
+
+```
+goplot gamma.gpl
 ```

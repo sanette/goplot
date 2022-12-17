@@ -1,7 +1,8 @@
-let version = "0.5"
+let version = "0.6"
 
 module Plt = Oplot.Plt
-module Osys = Oplot.Internal
+
+module Osys = Oplot.Plt.Internal
 
 type zone = { mutable window:GWindow.window; (* necessaire ? *)
               mutable area:GlGtk.area; mutable graph:Plt.plot_object;
@@ -24,7 +25,7 @@ type text = { msg:string; format:text_format; pos:point; size:int; alignment:str
 
 type pause_type = Soft | Freeze
 
-type motion_type = 
+type motion_type =
   | Translate of point3d
   | Rotate of point3d * string (* angular speed *)
   | Zoom of string (*?*)
@@ -64,16 +65,15 @@ let goplotdir =
   | _ -> Filename.concat (dirname (dirname exe)) "share"
 
 let () = Debug.print "Using goplotdir=%s " goplotdir
-    
+
 let imagedir = concat goplotdir "images"
 
 let imagepath ?(size=64) name =
   let s = Osys.iscale 1 * size in
   let rec loop s =
     if s = 0 then concat imagedir "warning.png"
-    else let file = name ^ (string_of_int s) ^ ".png" 
+    else let file = name ^ (string_of_int s) ^ ".png"
                     |> concat imagedir in
       if Sys.file_exists file then file
       else loop (s-1) in
   loop s
-

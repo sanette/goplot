@@ -4,18 +4,18 @@
 
 open Init
 open Gutil
-module Osys = Oplot.Internal
-                   
+module Osys = Oplot.Plt.Internal
+
 let assistant_box cancel =
-  let window = GWindow.window ~title:"Welcome to gOplot" 
+  let window = GWindow.window ~title:"Welcome to gOplot"
       ~modal:true () in
   let main_vbox = GPack.vbox ~spacing:2 ~border_width:5
       ~packing:window#add () in
   let cadre = GBin.frame ~border_width:5 ~shadow_type:`IN
-      ~packing:main_vbox#add () in  
+      ~packing:main_vbox#add () in
   let cadre_box = GPack.vbox ~packing:cadre#add ~show:true () in
   let title_box = GPack.hbox ~packing:cadre_box#pack () in
-  let _ = GMisc.image ~file:(concat imagedir "pelotte_icon64.png") 
+  let _ = GMisc.image ~file:(concat imagedir "pelotte_icon64.png")
       ~packing:title_box#pack  () in
   let title = GMisc.label ~text:"Bienvenue sur gOplot" ~packing:title_box#add ()
   in set_font_style ~size:18 title;
@@ -35,9 +35,9 @@ let print_box markup cadre : GPack.box =
 
 
 (* effectue une suite de (messages,actions) dans une fenêtre fixe *)
-let assistant steps cancel = 
+let assistant steps cancel =
   let (window, cadre, button_box) = assistant_box cancel in
-  let rec loop list i = 
+  let rec loop list i =
     print_endline (Printf.sprintf "Assistant page %d." i);
     match list with
     | [] -> window#destroy ()
@@ -47,11 +47,11 @@ let assistant steps cancel =
      ~packing:(button_box#pack ~from:`END) () in
  button#grab_default ();
  button#connect#clicked ~callback:
-   (fun () -> begin 
+   (fun () -> begin
         callback ();
         box#destroy ();
         button#destroy();
-        loop rest (i+1) 
+        loop rest (i+1)
              end)
         |> ignore;
  ()
@@ -60,7 +60,7 @@ let assistant steps cancel =
   window#show ();;
 
 
-let wizard show = 
+let wizard show =
   let list = [("Il semble que ce soit la première fois que vous utilisiez <span \
                 color=\"red\" weight=\"bold\">gOplot</span>.
 Je vais détecter les outils présents sur votre système.",
@@ -68,7 +68,7 @@ Je vais détecter les outils présents sur votre système.",
        ("Un
 coup
 pour
-rien", 
+rien",
         fun () -> (print_endline "Action 2"; Unix.sleep 1));
        ("L'initialisation est terminée !", show)] in
   assistant list show;;
@@ -76,18 +76,18 @@ rien",
 
 (**********************)
 
-let bienvenue cadre = 
+let bienvenue cadre =
   print_box "Il semble que ce soit la première fois que vous utilisiez <span \
              color=\"red\" weight=\"bold\">gOplot</span>.
 Je vais détecter les outils présents sur votre système." cadre;;
 
-let check_postscript cadre = 
+let check_postscript cadre =
   let warning =
     match (Osys.has_gs, Osys.has_fig2dev) with
-    | true, true -> (bold "ghostscript") ^ " et " ^ (bold "fig2dev") ^ 
+    | true, true -> (bold "ghostscript") ^ " et " ^ (bold "fig2dev") ^
                     " sont présents sur votre système.\n\
                      Très bien."
-    | true, false -> 
+    | true, false ->
       "fig2dev n'a pas été trouvé sur votre système.\n\
        Installez le paquetage \"transfig\" afin de pouvoir exporter en \
        postscript
@@ -105,8 +105,8 @@ afin de pouvoir exporter en postscript
 et imprimer vos graphiques." in
   print_box warning cadre
 
-let check_latex cadre = 
-  let warning = 
+let check_latex cadre =
+  let warning =
     match (Osys.has_latex, Osys.has_gs) with
     | true, true when (Osys.pngalpha ()) -> begin
         try
@@ -118,7 +118,7 @@ let check_latex cadre =
           ^ (bold "LaTeX") ^ "."
         | _ -> "OOps !" end
     | true, true ->
-      (bold "LaTeX") ^ " est installé mais " 
+      (bold "LaTeX") ^ " est installé mais "
       ^ (bold "postscript") ^
       "ne possède pas le device \"pngalpha\".\n\
        Du coup, les sorties écran de formules mathématiques ne seront pas de \
@@ -128,7 +128,7 @@ let check_latex cadre =
     | true, _ ->
       (bold "LaTeX") ^
       " est bien installé...\nmais ne sert à rien tant que "
-      ^ (bold "ghostscript") 
+      ^ (bold "ghostscript")
       ^ " n'est pas installé.\n\
          Vous ne pourrez pas écrire de formules mathématiques."
     | false, _ ->
@@ -143,9 +143,9 @@ let fin cadre =
 
 (***************************)
 
-let assistant2 steps cancel = 
+let assistant2 steps cancel =
   let (window, cadre, button_box) = assistant_box cancel in
-  let rec loop list i = 
+  let rec loop list i =
     print_endline (Printf.sprintf "Assistant page %d." i);
     match list with
     | [] -> (window#destroy (); cancel ())
@@ -155,16 +155,15 @@ let assistant2 steps cancel =
             ~packing:(button_box#pack ~from:`END) () in
         button#grab_default ();
         button#connect#clicked ~callback:
-          (fun () -> begin 
+          (fun () -> begin
                box#destroy ();
                button#destroy();
-               loop rest (i+1) 
+               loop rest (i+1)
              end) |> ignore
       end in
   loop steps 0;
   window#show ();;
 
-let wizard2 show = 
+let wizard2 show =
   let steps = [ bienvenue; check_postscript; check_latex; fin ] in
     assistant2 steps show;;
-
