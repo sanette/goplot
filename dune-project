@@ -1,7 +1,7 @@
 (lang dune 2.09)
 (using menhir 2.0)
 (name goplot)
-(version "0.6")
+(version "0.60")
 (generate_opam_files true)
 (license GPL-3.0-or-later)
 (maintainers "Vu Ngoc San <san.vu-ngoc@laposte.net>")
